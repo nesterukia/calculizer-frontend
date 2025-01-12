@@ -1,0 +1,16 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.disabled{
+    cursor: not-allowed;
+    pointer-events:none;
+    opacity: 0.5;
+
+    & input{
+        cursor: not-allowed;
+    }
+}

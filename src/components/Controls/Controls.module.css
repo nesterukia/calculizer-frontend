@@ -1,0 +1,33 @@
+.container{
+    max-width: 500px;
+    width: 100%;
+}
+
+.controls{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.label{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+}
+
+.input{
+    border: 2px solid var(--text-color);
+    padding: 5px;
+    width: 100px;
+    &:focus {
+      outline: none;
+    }
+}

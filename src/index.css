@@ -1,0 +1,97 @@
+h1,
+h2,
+h3,
+h4,
+button,
+a,
+ul,
+ol,
+li {
+  all: unset;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  cursor: pointer;
+}
+
+img {
+  user-drag: none;
+  -webkit-user-drag: none;
+}
+
+:root {
+  --text-color: black;
+  --background-color: rgb(197, 240, 197);
+  --regular-font-weight: 400;
+  --medium-font-weight: 600;
+  --base-font-size: normal;
+  --base-font: var(--regular-font-weight) var(--base-font-size) "Finlandica", serif;
+
+  background-color: var(--background-color);
+}
+
+body,
+input,
+textarea,
+button {
+  font-family: "Finlandica", serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 20px;
+}
+
+h1, h2, h3, h4{
+  font-weight: var(--medium-font-weight);
+  line-height: 100%;
+}
+
+h1{
+  font-size: 60px;
+}
+
+h2{
+  font-size: 40px;
+}
+
+h3{
+  font-size: 28px;
+}
+
+h4{
+  font-size: 24px;
+}
+
+button{
+  cursor: pointer;
+  padding: 10px;
+  border: 2px solid var(--text-color);
+  border-radius: 100px;
+  background-color: white;
+  transition: box-shadow .2s;
+
+  &:hover{
+    -webkit-box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 4px 4px 8px 0px rgba(0, 0, 0, 0.5);
+  }
+
+  &:disabled{
+    cursor: not-allowed;
+    opacity: 0.5;
+    &:hover{
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+    }
+  }
+}
