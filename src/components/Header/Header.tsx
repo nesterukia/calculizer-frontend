@@ -32,10 +32,10 @@ export const Header = () => {
 
     return(
         <header className={styles.header} >
-            <h1 className={styles.logo}>
+            <h2 className={styles.logo}>
                 <img src={calculatorImg} alt="calculator" className={styles.icon}/>
                 КАЛЬКУЛЯЙЗЕР-3000
-            </h1>
+            </h2>
             <form className={styles.form} onSubmit={handleSubmit}>
                 <div className={styles.formContainer}>
                     <button id="connect" className={styles.button} type="button" disabled={isConnected} onClick={handleConnect}>

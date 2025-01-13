@@ -2,7 +2,7 @@ export enum CalculationStatusType{
     READY,
     RUNNING, 
     PAUSED, 
-    STOPPED,
+    STOPPED,    
     ERROR
 }
 

@@ -167,7 +167,6 @@ export const Controls = () => {
     }
 
     const toggleCalculation = () => {
-
         if ((controlsValue.start < controlsValue.end) && (controlsValue.step > 0)) {
             let newStatus: CalculationStatusType = calculation.status;
             switch(calculation.status){
@@ -200,6 +199,7 @@ export const Controls = () => {
     const handleReset = () => {
         dispatch(clearPoints());
         setControlsValue({...INIT_CONTROLS_VALUE, function: functions[0]});
+        dispatch(setControls(controlsValue));
         setCalculation(INIT_CALCULATION);
     }
 
@@ -213,6 +213,7 @@ export const Controls = () => {
                         id="function" 
                         onChange={handleFunctionSelectorChange}
                         disabled={calculation.status === CalculationStatusType.RUNNING}
+                        value={controlsValue.function}
                     >
                         {
                             functions.map((functionName: string, i) => 

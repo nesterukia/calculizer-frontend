@@ -21,7 +21,8 @@ interface DataSet{
 
 interface Data{
     labels: string[],
-    datasets: DataSet[]
+    datasets: DataSet[],
+    options: Object
 }
 
 export const Graph = () => {
@@ -32,7 +33,17 @@ export const Graph = () => {
             data: [],
             backgroundColor: "red",
             borderColor: "red"
-        }]
+        }],
+        options: {
+            scales: {
+              x: {
+                type: 'linear', /* <--- this */
+              },
+              y: {
+                type: 'linear', /* <--- this */
+              }
+            }
+          }
     }
 
     const pointsFromStore: Point[] = useSelector((state: RootState) => state.points.points);
@@ -41,6 +52,7 @@ export const Graph = () => {
 
     useEffect(() => {
         setData({
+            ...data,
             labels: pointsFromStore.map((p: Point) => p.xCoordinate.toString()),
             datasets: [
                 {

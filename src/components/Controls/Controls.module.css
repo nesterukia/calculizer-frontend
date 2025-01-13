@@ -1,5 +1,5 @@
 .container{
-    max-width: 500px;
+    max-width: 600px;
     width: 100%;
 }
 
@@ -26,7 +26,7 @@
 .input{
     border: 2px solid var(--text-color);
     padding: 5px;
-    width: 100px;
+    width: 200px;
     &:focus {
       outline: none;
     }
