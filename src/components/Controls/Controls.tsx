@@ -8,9 +8,11 @@ import { ControlsValue } from '../../interfaces/ControlsValue'
 import { Calculation, CalculationStatusType } from '../../interfaces/Calculation'
 import { clearPoints } from '../../store/slices/pointsSlice'
 import { setControls } from '../../store/slices/controlsSlice'
+import { Point } from '../../interfaces/Point'
 
 export const Controls = () => {
     const user = useSelector((state: RootState) => state.connection.user);
+    const pointsFromStore: Point[] = useSelector((state: RootState) => state.points.points);
     const dispatch = useDispatch();
 
     const INIT_FUNCTIONS: string[] = []
@@ -43,6 +45,15 @@ export const Controls = () => {
     const [calculation, setCalculation] = useState(INIT_CALCULATION);
 
     useEffect(() => {
+        if(pointsFromStore.some(point => point.xCoordinate === controlsValue.end)){
+            setCalculation({
+                ...calculation, 
+                status: CalculationStatusType.READY
+            }) 
+        }
+    }, [pointsFromStore])
+
+    useEffect(() => {
         switch(calculation.status){
             case CalculationStatusType.RUNNING:
                 console.log('CALCULATION RUNNING');
@@ -52,6 +63,7 @@ export const Controls = () => {
                 break;
             case CalculationStatusType.READY:
                 console.log('CALCULATION READY');
+                console.log('ALL POINTS: ', pointsFromStore);
                 break;
             default:
                 console.error('[Controls.tsx] UNKNOWN ERROR DURING CALCULATION')
@@ -201,7 +213,7 @@ export const Controls = () => {
                         className={styles.input} 
                         id="function" 
                         onChange={handleFunctionSelectorChange}
-                        disabled={calculation.status === CalculationStatusType.RUNNING}
+                        disabled={[CalculationStatusType.RUNNING, CalculationStatusType.PAUSED].includes(calculation.status)}
                         value={controlsValue.function}
                     >
                         {
@@ -236,7 +248,7 @@ export const Controls = () => {
                         placeholder='Правая граница графика' 
                         value={controlsValue.end} 
                         onChange={handleEndInputChange}
-                        disabled={calculation.status === CalculationStatusType.RUNNING}
+                        disabled={[CalculationStatusType.RUNNING, CalculationStatusType.PAUSED].includes(calculation.status)}
                     />
                 </label>
                 <label htmlFor='step' className={styles.label}>
@@ -249,7 +261,7 @@ export const Controls = () => {
                         placeholder='Шаг расчета' 
                         value={controlsValue.step} 
                         onChange={handleStepInputChange}
-                        disabled={calculation.status === CalculationStatusType.RUNNING}
+                        disabled={[CalculationStatusType.RUNNING, CalculationStatusType.PAUSED].includes(calculation.status)}
                     />
                 </label>
                 <div className={styles.buttons}>
