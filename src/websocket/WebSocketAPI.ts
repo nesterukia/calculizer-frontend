@@ -1,8 +1,8 @@
 import { Client } from '@stomp/stompjs'
 import store from '../store/store';
+import axios from 'axios';
 import { Point } from '../interfaces/Point';
-import { addPoint, clearPoints } from '../store/slices/pointsSlice';
-import { CalculationRequest } from '../interfaces/CalculationRequest';
+import { addPoints, clearPoints } from '../store/slices/pointsSlice';
 import { toggleConnection } from '../store/slices/connectionSlice';
 
 const serverHost = window.location.host;
@@ -19,11 +19,8 @@ onConnect: (frame) => {
     console.log('Subscribed as', userId)
 
     stompClient.subscribe(`/user/${userId}/calculation`, (response) => {
-        const point: Point = JSON.parse(response.body);
-        const points = store.getState().points.points;
-        if (!points.includes(point)){
-            store.dispatch(addPoint(point))
-        }
+        const points: Point[] = JSON.parse(response.body);
+        store.dispatch(addPoints(points))
     });
 },
 });
@@ -45,30 +42,9 @@ export function connect() {
 
 export function disconnect() {
     const currentUser = store.getState().connection.user;
-    removeUser(currentUser.id);
+    const removeUserApiUrl = `${window.location}removeUser/${currentUser.id}`;
+    axios.post(removeUserApiUrl).then((response) => console.log(response));
 
     store.dispatch(clearPoints());
     stompClient.deactivate();
-}
-
-export function registerUser(userId: string) {
-    stompClient.publish({
-        destination: `/app/newUser/${userId}`
-    });
-}
-
-export function removeUser(userId: string) {
-    stompClient.publish({
-        destination: `/app/removeUser/${userId}`,
-    });
-}
-
-
-export function calculate(request: CalculationRequest){
-    stompClient.publish({
-        destination: "/app/calculate",
-        body: JSON.stringify(request)
-    });
-
-    console.log('[SEND ========>]',request);
 }

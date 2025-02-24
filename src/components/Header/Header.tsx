@@ -1,5 +1,6 @@
 import styles from './Header.module.css'
-import { connect, disconnect, registerUser} from '../../websocket/WebSocketAPI'
+import axios from 'axios'
+import { connect, disconnect} from '../../websocket/WebSocketAPI'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 import { setUser, toggleConnection } from '../../store/slices/connectionSlice'
@@ -20,7 +21,8 @@ export const Header = () => {
         dispatch(setUser({id}));
         connect();
         setTimeout(() => {
-            registerUser(id);
+            const newUserApiUrl = `${window.location}newUser/${id}`;
+            axios.post(newUserApiUrl).then((response) => console.log(response));
         }, 500)
     }
 

@@ -16,14 +16,13 @@ const pointsSlice = createSlice({
         clearPoints: (state) => {
             state.points = [];
         },
-        addPoint: (state, action: PayloadAction<Point>) => {
+        addPoints: (state, action: PayloadAction<Point[]>) => {
             console.log('[GOT  <========]', action.payload);
-            state.points.push(action.payload);
+            state.points  = state.points.concat(action.payload);
             state.points.sort((a, b) => a.xCoordinate - b.xCoordinate);
         }
-
     }
 })
 
-export const { clearPoints, addPoint } = pointsSlice.actions;
+export const { clearPoints, addPoints } = pointsSlice.actions;
 export default pointsSlice.reducer;

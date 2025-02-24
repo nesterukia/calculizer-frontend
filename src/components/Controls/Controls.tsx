@@ -4,11 +4,9 @@ import styles from './Controls.module.css'
 import { CalculationRequest } from '../../interfaces/CalculationRequest'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
-import { calculate } from '../../websocket/WebSocketAPI'
 import { ControlsValue } from '../../interfaces/ControlsValue'
 import { Calculation, CalculationStatusType } from '../../interfaces/Calculation'
 import { clearPoints } from '../../store/slices/pointsSlice'
-import NP from 'number-precision'
 import { setControls } from '../../store/slices/controlsSlice'
 
 export const Controls = () => {
@@ -48,29 +46,6 @@ export const Controls = () => {
         switch(calculation.status){
             case CalculationStatusType.RUNNING:
                 console.log('CALCULATION RUNNING');
-                    setTimeout(() => {
-                        const request: CalculationRequest = {
-                            user_id: user.id,
-                            function_type: controlsValue.function,
-                            x_coordinate: NP.round(calculation.currentX, 3)
-                        }
-
-                        calculate(request);
-
-                        setCalculation((prev) => {
-                            return {
-                                ...prev, 
-                                currentX: NP.plus(prev.currentX, controlsValue.step) > controlsValue.end ? controlsValue.end : NP.plus(prev.currentX, controlsValue.step)
-                            }
-                        })
-
-                        if (calculation.currentX >= controlsValue.end){
-                            setCalculation({
-                                currentX: controlsValue.start,
-                                status: CalculationStatusType.READY
-                            });
-                        }
-                    }, 128)
                 break;
             case CalculationStatusType.PAUSED:
                 console.log('CALCULATION PAUSED');
@@ -173,16 +148,30 @@ export const Controls = () => {
                 case CalculationStatusType.READY:
                     dispatch(clearPoints());
                     newStatus = CalculationStatusType.RUNNING;
+                    const request: CalculationRequest = {
+                        start: controlsValue.start,
+                        end: controlsValue.end,
+                        step: controlsValue.step,
+                        function_type: controlsValue.function
+                    }
+                    const startApiUrl = `${window.location}startCalculations/${user.id}`;
+                    axios.post(startApiUrl, request).then((response) => console.log(response));
                     break;
                 case CalculationStatusType.RUNNING:
                     newStatus = CalculationStatusType.PAUSED;
+                    const pauseApiUrl = `${window.location}pauseCalculations/${user.id}`;
+                    axios.post(pauseApiUrl).then((response) => console.log(response));
                     break;
                 case CalculationStatusType.PAUSED:
                     newStatus = CalculationStatusType.RUNNING;
+                    const resumeApiUrl = `${window.location}resumeCalculations/${user.id}`;
+                    axios.post(resumeApiUrl).then((response) => console.log(response));
                     break;
                 case CalculationStatusType.STOPPED:
                 case CalculationStatusType.ERROR:
                     newStatus = CalculationStatusType.READY;
+                    const stopApiUrl = `${window.location}stopCalculations/${user.id}`;
+                    axios.post(stopApiUrl).then((response) => console.log(response));
                     break;
             }
     
